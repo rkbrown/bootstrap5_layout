@@ -52,3 +52,7 @@ body, .navbar, .card {
 	border-left: 1px solid #aaa;
 	border-right: 1px solid #aaa;
 }
+.userContent,
+.detailContent {
+	background-color: #39c;
+}
