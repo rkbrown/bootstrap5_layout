@@ -1,0 +1,54 @@
+/* base from OpenAI starter */
+	html, body, .container-fluid, .row.g-0 {height: 100%;}
+body {min-height: 100vh;}
+.container-fluid {height: calc(100vh - 56px);}
+.row.g-0 {height: 100%; display: flex; min-height: 300px;}
+.card-body {height: 100%;}
+/* Remove dropdown border radius */
+.dropdown-menu {border-radius: 0 !important;}
+
+/* Multi-level submenu styles */
+.dropdown-submenu { position: relative; }
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -0.1rem;
+}
+.dropdown-menu .dropdown-menu {
+  display: none;
+  position: absolute;
+  min-width: 10rem;
+}
+.dropdown-menu .dropdown-menu.show {
+  display: block;
+}
+@media (min-width: 992px) {
+  /* On desktop, allow submenu open on hover/focus within */
+  .dropdown-menu > .dropdown-submenu:hover > .dropdown-menu,
+  .dropdown-menu > .dropdown-submenu:focus-within > .dropdown-menu {
+	display: block;
+  }
+}
+@media (max-width: 991.98px) {
+  .dropdown-menu .dropdown-menu {
+	position: static;
+	margin-left: 0;
+  }
+}
+/* Night mode smooth transition */
+body, .navbar, .card {
+  transition: background-color .3s, color .3s;
+}
+
+/* my customized start */
+.topNav {
+	background-color: #249;
+	color: white;
+}
+.contentBox {
+	padding: 5px;
+}
+.mainContent {
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+}

@@ -7,7 +7,7 @@
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Your base.css (for site overrides) -->
-  <link href="/css/base.css" rel="stylesheet">
+  <link href="assets/css/base.css" rel="stylesheet">
   <style>
 	html, body, .container-fluid, .row.g-0 {height: 100%;}
 	body {min-height: 100vh;}
@@ -53,16 +53,24 @@
 </head>
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+  <nav class="topNav navbar navbar-expand-lg navbar-dark px-3">
 	<a class="navbar-brand d-flex align-items-center" href="#">
-	  <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="32" height="32" class="me-2"> MyApp
+	  <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="32" height="32" class="me-2">ibis2 New start
 	</a>
 	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
 	  <span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse ms-3" id="navbarNav">
 	  <ul class="navbar-nav">
-		<li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+		<li class="nav-item">
+			<a class="nav-link dropdown-toggle">rkb</a>
+			<ul class="dropdown-menu" aria-labelledby="mainDropdown">
+				<li><a class="dropdown-item" href="#">Overview</a></li>
+			</ul>
+		</li>
+		<li class="nav-item"><a class="nav-link" href="#">new accession</a></li>
+		<li class="nav-item"><a class="nav-link" href="#">accession search</a></li>
+		<li class="nav-item"><a class="nav-link" href="#">index browse</a></li>
 		<!-- Multi-level dropdown: top-level opens on click, submenus open on hover -->
 		<li class="nav-item dropdown">
 		  <a class="nav-link dropdown-toggle" href="#" id="mainDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -96,14 +104,17 @@
   <!-- THREE-COLUMN FIXED LAYOUT -->
   <div class="container-fluid">
 	<div class="row g-0">
-	  <div class="col-md-2 bg-body-secondary">
-		<div class="card card-body h-100">Column 1 (Sidebar or navigation)</div>
+	  <div class="col-md-2 contentBox userContent">
+		<!-- <div class="card card-body h-100">Column 1 (Sidebar or navigation)</div> -->
+		<h1>new content</h1>
 	  </div>
-	  <div class="col-md-8 bg-body-secondary">
-		<div class="card card-body h-100">Column 2 (Main Content)</div>
+	  <div class="col-md-8 contentBox mainContent">
+		<!-- <div class="card card-body h-100">Column 2 (Main Content)</div> -->
+		<h1>new content</h1>
 	  </div>
-	  <div class="col-md-2 bg-body-secondary">
-		<div class="card card-body h-100">Column 3 (Tools or info)</div>
+	  <div class="col-md-2 rightBox contentBox detailContent">
+		<!-- <div class="card card-body h-100">Column 3 (Tools or info)</div> -->
+		<h1>new content</h1>
 	  </div>
 	</div>
   </div>
