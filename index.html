@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap 5 Multi-Level Menu Layout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+	html, body {
+	  height: 100%;
+	}
+	body, .container-fluid, .row.g-0 {
+	  height: 100%;
+	  min-height: 100vh;
+	}
+	.container-fluid {
+	  height: calc(100vh - 56px);
+	}
+	.row.g-0 {
+	  height: 100%;
+	  display: flex;
+	  min-height: 300px;
+	}
+	.resizable-col {
+	  position: relative;
+	  display: flex;
+	  flex-direction: column;
+	  min-width: 100px;
+	  min-height: 0;
+	  flex: 1 1 0;
+	}
+	.card-body {
+	  height: 100%;
+	}
+	.resizer {
+	  position: absolute;
+	  top: 0;
+	  right: -4px;
+	  width: 8px;
+	  height: 100%;
+	  cursor: col-resize;
+	  z-index: 2;
+	}
+
+	/* Multi-level submenu styles */
+	.dropdown-submenu {
+	  position: relative;
+	}
+	.dropdown-submenu > .dropdown-menu {
+	  top: 0;
+	  left: 100%;
+	  margin-top: -0.1rem;
+	}
+	/* Default: only root Bootstrap opens on click. .show class controls submenus. */
+	.dropdown-menu .dropdown-menu {
+	  display: none;
+	  position: absolute;
+	  min-width: 10rem;
+	}
+	.dropdown-menu .dropdown-menu.show {
+	  display: block;
+	}
+	/* Desktop - hover to unfold submenus. (Mobile: keep Bootstrap click) */
+	@media (min-width: 992px) {
+	  .dropdown-menu > .dropdown-submenu:hover > .dropdown-menu,
+	  .dropdown-menu > .dropdown-submenu:focus-within > .dropdown-menu {
+		display: block;
+	  }
+	}
+	@media (max-width: 991.98px) {
+	  .dropdown-menu .dropdown-menu {
+		position: static;
+		margin-left: 0;
+	  }
+	}
+
+	body, .navbar, .card {
+	  transition: background-color .3s, color .3s;
+	}
+  </style>
+</head>
+<body>
+  <!-- Header/Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+	<a class="navbar-brand d-flex align-items-center" href="#">
+	  <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="32" height="32" class="d-inline-block align-text-top me-2"> MyApp
+	</a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+	  <span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse ms-3" id="navbarNav">
+	  <ul class="navbar-nav">
+		<li class="nav-item">
+		  <a class="nav-link active" href="#">Home</a>
+		</li>
+		<!-- Multi-level dropdown - root opens on click, submenus on hover -->
+		<li class="nav-item dropdown">
+		  <a class="nav-link dropdown-toggle" href="#" id="mainDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+			Topics
+		  </a>
+		  <ul class="dropdown-menu" aria-labelledby="mainDropdown">
+			<li><a class="dropdown-item" href="#">Overview</a></li>
+			<li class="dropdown-submenu">
+			  <a class="dropdown-item dropdown-toggle" href="#">Frontend</a>
+			  <ul class="dropdown-menu">
+				<li><a class="dropdown-item" href="#">HTML</a></li>
+				<li><a class="dropdown-item" href="#">CSS</a></li>
+				<li class="dropdown-submenu">
+				  <a class="dropdown-item dropdown-toggle" href="#">Javascript</a>
+				  <ul class="dropdown-menu">
+					<li><a class="dropdown-item" href="#">Vanilla</a></li>
+					<li><a class="dropdown-item" href="#">React</a></li>
+				  </ul>
+				</li>
+			  </ul>
+			</li>
+			<li><a class="dropdown-item" href="#">Backend</a></li>
+		  </ul>
+		</li>
+		<li class="nav-item"><a class="nav-link" href="#">About</a></li>
+	  </ul>
+	</div>
+	<button class="btn btn-outline-light ms-auto" id="nightModeBtn">🌙 Night Mode</button>
+  </nav>
+  
+  <!-- 3 resizable columns no gutter -->
+  <div class="container-fluid">
+	<div class="row g-0">
+	  <div id="col1" class="col-md-2 resizable-col bg-body-secondary">
+		<div class="card card-body h-100">Column 1 (Sidebar or navigation)</div>
+		<div class="resizer" data-col="col1"></div>
+	  </div>
+	  <div id="col2" class="col-md-8 resizable-col bg-body-secondary">
+		<div class="card card-body h-100">Column 2 (Main Content)</div>
+		<div class="resizer" data-col="col2"></div>
+	  </div>
+	  <div id="col3" class="col-md-2 resizable-col bg-body-secondary">
+		<div class="card card-body h-100">Column 3 (Tools or info)</div>
+	  </div>
+	</div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Night Mode Script -->
+  <script>
+	const nightBtn = document.getElementById('nightModeBtn');
+	let isNight = false;
+	nightBtn.onclick = function() {
+	  isNight = !isNight;
+	  document.documentElement.setAttribute('data-bs-theme', isNight ? 'dark' : 'light');
+	  nightBtn.textContent = isNight ? "☀️ Light Mode" : "🌙 Night Mode";
+	};
+  </script>
+  <!-- Resizable Columns Script -->
+  <script>
+	let isResizing = false, lastDownX = 0, leftCol, rightCol, resizer;
+	document.querySelectorAll('.resizer').forEach(function(res) {
+	  res.addEventListener('mousedown', function(e) {
+		isResizing = true;
+		resizer = res;
+		leftCol = res.parentElement;
+		rightCol = leftCol.nextElementSibling;
+		lastDownX = e.clientX;
+		document.body.style.userSelect = 'none';
+	  });
+	});
+	document.addEventListener('mousemove', function(e) {
+	  if (!isResizing || !leftCol || !rightCol) return;
+	  let dx = e.clientX - lastDownX;
+	  let leftWidth = leftCol.offsetWidth + dx;
+	  let rightWidth = rightCol.offsetWidth - dx;
+	  const minWidth = 100;
+	  if (leftWidth < minWidth || rightWidth < minWidth) return;
+	  leftCol.style.flex = '0 0 ' + leftWidth + 'px';
+	  rightCol.style.flex = '0 0 ' + rightWidth + 'px';
+	  lastDownX = e.clientX;
+	});
+	document.addEventListener('mouseup', function() {
+	  if (isResizing) {
+		isResizing = false;
+		document.body.style.userSelect = '';
+	  }
+	});
+  </script>
+</body>
+</html>

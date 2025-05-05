@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8">
+<title>Resizable Columns with Persistent Widths</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  html, body {height: 100%;}
+  body, .container-fluid, .row.g-0 {height: 100%;min-height: 100vh;}
+  .container-fluid {height: calc(100vh - 56px);}
+  .row.g-0 {height: 100%;display: flex;min-height: 300px;}
+  .resizable-col {position: relative;display: flex;flex-direction: column;min-width: 100px;min-height: 0;flex: 1 1 0;}
+  .card-body {height: 100%;}
+  .resizer {position: absolute;top: 0;right: -4px;width: 8px;height: 100%;cursor: col-resize;z-index: 2;}
+  /* Optional: Remove dropdown-menu border radius */
+  .dropdown-menu {border-radius: 0 !important;}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+  <a class="navbar-brand d-flex align-items-center" href="#">
+	<img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="32" height="32" class="me-2"> MyApp
+  </a>
+</nav>
+<div class="container-fluid">
+  <div class="row g-0">
+	<div id="col1" class="col-md-2 resizable-col bg-body-secondary">
+	  <div class="card card-body h-100">Column 1</div>
+	  <div class="resizer" data-col="col1"></div>
+	</div>
+	<div id="col2" class="col-md-8 resizable-col bg-body-secondary">
+	  <div class="card card-body h-100">Column 2</div>
+	  <div class="resizer" data-col="col2"></div>
+	</div>
+	<div id="col3" class="col-md-2 resizable-col bg-body-secondary">
+	  <div class="card card-body h-100">Column 3</div>
+	</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+	const COLS = ["col1","col2","col3"];
+
+	// Restore widths from localStorage if available
+	function restoreWidths() {
+	  let w = localStorage.getItem("col-widths");
+	  if(w) {
+		try {
+		  w = JSON.parse(w);
+		  COLS.forEach((id,idx) => {
+			if (w[idx] !== undefined)
+			  document.getElementById(id).style.flex = "0 0 " + w[idx]+"px";
+		  });
+		} catch (e) {}
+	  }
+	}
+	restoreWidths();
+
+	function saveWidths() {
+	  const w = COLS.map(id => document.getElementById(id).offsetWidth);
+	  localStorage.setItem("col-widths", JSON.stringify(w));
+	}
+
+	// Resizer logic
+	let isResizing = false, lastDownX = 0, leftCol, rightCol, resizer;
+	document.querySelectorAll('.resizer').forEach(function(res) {
+	  res.addEventListener('mousedown', function(e) {
+		isResizing = true;
+		resizer = res;
+		leftCol = res.parentElement;
+		rightCol = leftCol.nextElementSibling;
+		lastDownX = e.clientX;
+		document.body.style.userSelect = 'none';
+	  });
+	});
+	document.addEventListener('mousemove', function(e) {
+	  if (!isResizing || !leftCol || !rightCol) return;
+	  let dx = e.clientX - lastDownX;
+	  let leftWidth = leftCol.offsetWidth + dx;
+	  let rightWidth = rightCol.offsetWidth - dx;
+	  const minWidth = 100;
+	  if (leftWidth < minWidth || rightWidth < minWidth) return;
+	  leftCol.style.flex = '0 0 ' + leftWidth + 'px';
+	  rightCol.style.flex = '0 0 ' + rightWidth + 'px';
+	  lastDownX = e.clientX;
+	});
+	document.addEventListener('mouseup', function() {
+	  if (isResizing) {
+		isResizing = false;
+		document.body.style.userSelect = '';
+		saveWidths();
+	  }
+	});
+  </script>
+
+
+</body>
+</html>
